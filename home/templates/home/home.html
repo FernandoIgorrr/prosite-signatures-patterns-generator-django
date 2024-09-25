@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt" data-bs-theme="dark">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    
+  <link href="https://bootswatch.com/5/vapor/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <script src="https://kit.fontawesome.com/9ad3956135.js" crossorigin="anonymous"></script>
+  <title>PROSITE signatures patterns generator</title>
+</head>
+<body data-bs-theme="dark">
+  <!-- As a link -->
+  
+  
+  <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">BIOINFORMÁTICA ESTRUTURAL</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto"></ul>
+        <form class="d-flex">
+          <input class="form-control me-sm-2" type="search" placeholder="Search">
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  
+  
+  <ul class="nav nav-tabs nav-fill" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" data-bs-toggle="tab" href="#home" aria-selected="true" role="tab">PROSITE motif pattern</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" data-bs-toggle="tab" href="#profile" aria-selected="false" role="tab" tabindex="-1">Frequency matrix calculator</a>
+    </li>
+  </ul>
+  
+  
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active show d-flex justify-content-center text-center flex-column" id="home" role="tabpanel">
+      <h1>{{ title }}</h1>
+      <p>Selecione um arquivo de proteínas alinhadas no formato fasta</p>
+      
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#infoModal1" title="Informações">
+            <i class="fas fa-info-circle" style="color: #D62E74;font-size: 25px"></i>
+          </button>
+
+          
+<!-- Modal 1-->
+<div class="modal fade" id="infoModal1" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalLabel">Informações</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h3 style="text-align: justify;"> Modelos de pontuação de conservação</h3>
+
+        <p style="text-align: justify;"><strong>A classificação dos aminoácidos</strong> é uma abordagem simples para avaliar a conservação de
+alinhamentos de proteínas. Nesse método, os aminoácidos são agrupados com base em suas
+propriedades físicas e químicas, como carga elétrica, tamanho e hidrofobicidade.
+
+Para usar a classificação dos aminoácidos na avaliação da conservação de alinhamentos de
+proteínas, siga estes passos:</p>
+
+<p style="text-align: justify;"><strong>1. Identificação dos grupos de aminoácidos:</strong> Primeiro, agrupe os aminoácidos do alinhamento
+em categorias com base em suas propriedades. Por exemplo, você pode agrupar aminoácidos
+carregados positivamente, carregados negativamente, hidrofóbicos, hidrofílicos, etc.</p>
+
+<p style="text-align: justify;"><strong>2. Avaliação da conservação:</strong> Em seguida, examine cada posição no alinhamento e conte
+quantos aminoácidos de cada grupo estão presentes nessa posição. Uma maior predominância
+de um grupo particular em uma posição indica uma conservação de propriedades específicas
+nessa posição.</p>
+
+<p style="text-align: justify;"><strong>3. Interpretação:</strong> Com base na distribuição dos grupos de aminoácidos em diferentes posições
+do alinhamento, você pode inferir quais regiões são mais conservadas em termos de suas
+propriedades físicas e químicas. </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+          
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            {% for id, choice in form.score_model_conservation.field.choices %}
+            <input type="radio" class="btn-check" name="score_model_conservation" id="btnradio{{ forloop.counter }}" value="{{ id }}" autocomplete="off" {% if id == form.score_model_conservation.value %}checked{% endif %}>
+            <label class="btn btn-outline-primary" for="btnradio{{ forloop.counter }}">{{ choice }}</label>
+            {% endfor %}
+          </div>
+          
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#infoModal2" title="Informações">
+            <i class="fas fa-info-circle" style="color: #D62E74;font-size: 25px"></i>
+          </button>
+
+          <!-- Modal 2-->
+<div class="modal fade" id="infoModal2" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalLabel">Informações</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h3 style="text-align: justify;">Modelos de pontuação de conservação</h3>
+
+        <p style="text-align: justify;"><strong>A matriz BLOSUM</strong> (<strong>BLO</strong>cks of <strong>A</strong>mino <strong>A</strong>cid <strong>SU</strong>bstitution <strong>M</strong>atrix) é uma matriz de
+substituição usada para o alinhamento de sequências de proteínas. Matrizes
+BLOSUM são usadas para pontuar alinhamentos entre sequências de proteínas
+divergentes. Elas são baseadas em alinhamentos locais.
+Ela atribui pontuações a pares de aminoácidos com base na frequência com que
+ocorrem juntos em alinhamentos de proteínas homólogas.</p>
+
+<p style="text-align: justify;">Para usar a matriz BLOSUM62 na avaliação da conservação de alinhamentos
+de proteínas, você segue estes passos:</p>
+
+<p style="text-align: justify;"><strong>1. Alinhamento de sequências:</strong> Primeiro, você alinha as sequências de proteínas que deseja
+comparar usando um algoritmo como o BLAST ou o algoritmo de alinhamento múltiplo de
+sequências.</p>
+
+<p style="text-align: justify;"><strong>2. Atribuição de pontuações:</strong> Então, para cada posição no alinhamento, você olha para os
+aminoácidos correspondentes nas diferentes sequências alinhadas. Usando a matriz
+BLOSUM62, você atribui uma pontuação a esse par de aminoácidos. Pontuações mais altas
+indicam uma maior conservação evolutiva.</p>
+
+<p style="text-align: justify;"><strong>3. Avaliação da conservação:</strong> Com base nas pontuações atribuídas, você pode determinar quais
+posições no alinhamento são mais conservadas (ou seja, têm aminoácidos mais semelhantes
+entre as sequências) e quais são menos conservadas.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+        </div>
+          <div class="d-flex justify-content-center align-items-center mb-3">
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#infoModal3" title="Informações">
+              <i class="fas fa-info-circle" style="color: #D62E74;font-size: 25px"></i>
+          </button>
+
+         <!-- Modal 3-->
+         <div class="modal fade" id="infoModal3" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">Informações</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <h3 style="text-align: justify;">Limite de sequencias sem conservação (X-Threshold)</h3>
+        
+                <p style="text-align: justify;"><strong>O X-Threshold</strong> é útil para segmentar sequências longas que podem conter múltiplas instâncias de
+                  um padrão Prosite. Ele permite que você identifique regiões distintas dentro da sequência que
+                  correspondem a diferentes padrões ou motivos biológicos.
+                  </p>
+        
+        <p style="text-align: justify;">Ao definir um threshold adequado, você pode controlar a sensibilidade da detecção de padrões e
+          segmentar as sequências de maneira mais precisa, facilitando a análise e interpretação dos
+          resultados.</p>
+       
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+            <label for="xthreshold"><strong>X-Threshold:</strong></label>
+            {{ form.xthreshold }}
+          </div>
+          
+          <div class="d-flex justify-content-center mb-3">
+            {{ form.fasta_file }}
+          </div>
+          
+          
+        </form>
+        
+      </div>
+      <div class="tab-pane fade" id="profile" role="tabpanel"></div>
+    </div>
+
+
+    <!-- RESPOSTA  -->
+
+    <div class="container">
+      <h1>Sequências FASTA</h1>
+      <div class="fasta-container">
+          <ul>
+              {% for entry in fasta_entries %}
+              <li>
+                  <div class="sequence">
+                      <strong>{{ entry.name }}</strong>
+                      
+                      {% for aminoacid in entry.sequence %}
+                      <span class="span-sequence" style="background-color: white;">
+                          {{ aminoacid }}
+                      </span>
+                  {% endfor %}
+                  </div>
+                  <!-- Adiciona a parte para mostrar as assinaturas -->
+                  <div class="signatures">
+                      {% if prosite_assinatures %}
+                          <strong>Assinaturas:</strong>
+                          {% for signature in prosite_assinatures %}
+                              <span class="signature" style="color: #D62E74;">{{ signature }}</span>
+                          {% endfor %}
+                      {% endif %}
+                  </div>
+              </li>
+              {% endfor %}
+          </ul>
+      </div>
+    </div>
+    
+    <!-- Optional JavaScript; choose one of the two! -->
+    
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+
+    <!-- Um dialog simples contendo um form -->
+
+    <!-- Botão para abrir o modal -->
+
+  </body>
+  </html>
